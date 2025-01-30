@@ -1,0 +1,36 @@
+name: Build and Run Next.js Docker Image Locally
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Or you can use a macOS runner, but the focus is on local Docker
+
+    steps:
+      - name: Checkout code from GitHub
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-nextjs-app .
+
+      - name: Run Docker container locally
+        run: |
+          docker run -d -p 3000:3000 my-nextjs-app
