@@ -1,6 +1,7 @@
 name: Build and Run Next.js Docker Image Locally
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -9,12 +10,12 @@ on:
       - master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest # Or you can use a macOS runner, but the focus is on local Docker
+  test:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code from GitHub
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
